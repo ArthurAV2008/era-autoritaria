@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Era Autoritária</title>
+    <style>
+        /* --- VARIÁVEIS DE CORES (TEMA ESCURO) --- */
+        :root {
+            --bg-principal: #0f111a; 
+            --bg-secundario: #1a1d2d; 
+            --bg-modal: #1e2235; 
+            --texto-principal: #e2e8f0; 
+            --texto-secundario: #94a3b8; 
+            --destaque-azul: #3b82f6; 
+            --destaque-roxo: #8b5cf6; 
+            --linha-pontilhada: #334155; 
+        }
+
+        /* --- ESTILOS GERAIS E CABEÇALHO --- */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-principal);
+            color: var(--texto-principal);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--bg-secundario);
+            color: var(--texto-principal);
+            text-align: center;
+            padding: 25px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--linha-pontilhada);
+            z-index: 10;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--destaque-azul);
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 1rem;
+            color: var(--texto-secundario);
+        }
+
+        /* --- CONTAINER DA TELA INICIAL --- */
+        #telaInicial {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: center; 
+        }
+
+        /* --- FOTO DE CAPA AJUSTADA --- */
+        .hero-image-container {
+            width: 100%;
+            height: 300px; 
+            margin-top: 40px; 
+            background-color: var(--bg-principal); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            object-position: center;
+        }
+
+        /* --- MENU DE ESCOLHA --- */
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 40px 20px;
+            margin-top: -20px; 
+        }
+
+        .menu-btn {
+            background-color: var(--bg-secundario);
+            border: 2px solid var(--destaque-azul);
+            border-radius: 10px;
+            padding: 30px 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--texto-principal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        }
+
+        .menu-btn:hover {
+            background-color: var(--destaque-azul);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+
+        /* --- LINHA DO TEMPO --- */
+        .timeline-section {
+            display: none;
+            padding: 40px 20px;
+            overflow-x: auto;
+            background-color: var(--bg-principal);
+            flex: 1;
+        }
+
+        .timeline-section.active {
+            display: block;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: var(--destaque-roxo);
+            border: 1px solid var(--destaque-roxo);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--destaque-roxo);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .timeline-section h2 {
+            text-align: center;
+            color: var(--texto-principal);
+            margin-bottom: 30px;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 1200px;
+            padding: 100px 0;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            border-top: 2px dashed var(--linha-pontilhada);
+            z-index: 1;
+        }
+
+        .timeline-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+        }
+
+        .timeline-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--linha-pontilhada);
+            margin-bottom: 10px;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .timeline-item:hover .timeline-number {
+            color: var(--texto-secundario);
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--destaque-azul);
+            border: 3px solid var(--bg-principal);
+            box-shadow: 0 0 0 2px var(--destaque-azul), 0 0 10px var(--destaque-azul);
+            margin-bottom: 15px;
+            position: relative;
+            top: -1px;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            background-color: var(--destaque-roxo);
+            box-shadow: 0 0 0 2px var(--destaque-roxo), 0 0 15px var(--destaque-roxo);
+        }
+
+        .timeline-card {
+            background: var(--bg-secundario);
+            border: 1px solid var(--linha-pontilhada);
+            border-left: 4px solid var(--destaque-azul);
+            padding: 12px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            text-align: left;
+            border-radius: 4px;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+            border-color: var(--texto-secundario);
+        }
+
+        .timeline-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 0.85rem;
+            color: var(--texto-principal);
+            text-transform: uppercase;
+        }
+
+        .timeline-card p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--texto-secundario);
+            line-height: 1.3;
+        }
+
+        .item-1 .timeline-card { border-left-color: #3b82f6; }
+        .item-2 .timeline-card { border-left-color: #10b981; }
+        .item-3 .timeline-card { border-left-color: #8b5cf6; }
+        .item-4 .timeline-card { border-left-color: #f59e0b; }
+        .item-5 .timeline-card { border-left-color: #ef4444; }
+        .item-6 .timeline-card { border-left-color: #10b981; }
+        .item-7 .timeline-card { border-left-color: #3b82f6; }
+        .item-8 .timeline-card { border-left-color: #f59e0b; }
+        .item-9 .timeline-card { border-left-color: #8b5cf6; }
+        .item-10 .timeline-card { border-left-color: #10b981; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: var(--bg-modal);
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid var(--linha-pontilhada);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(59, 130, 246, 0.1);
+            max-height: 85vh;
+            overflow-y: auto;
+            color: var(--texto-principal);
+        }
+
+        .modal-content::-webkit-scrollbar { width: 8px; }
+        .modal-content::-webkit-scrollbar-track { background: var(--bg-secundario); }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--linha-pontilhada); border-radius: 4px; }
+        .modal-content::-webkit-scrollbar-thumb:hover { background: var(--texto-secundario); }
+
+        .close-btn {
+            color: var(--texto-secundario);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 10;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ef4444;
+        }
+
+        .modal-content h2 {
+            color: var(--destaque-azul);
+            margin-top: 0;
+            padding-right: 30px;
+            border-bottom: 1px solid var(--linha-pontilhada);
+            padding-bottom: 10px;
+        }
+
+        .modal-content p, .modal-content li {
+            line-height: 1.6;
+            color: var(--texto-principal);
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        .modal-content ul {
+            padding-left: 20px;
+        }
+
+        .modal-content a {
+            color: var(--destaque-azul);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .modal-content a:hover {
+            color: var(--destaque-roxo);
+            text-decoration: underline;
+        }
+
+        .modal-content strong {
+            color: #fff;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 300px;
+            background-color: var(--bg-secundario);
+            border: 2px dashed var(--linha-pontilhada);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--texto-secundario);
+            font-style: italic;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .menu-container { flex-direction: column; padding-top: 20px; }
+            .menu-btn { width: 100%; }
+            .modal-content { width: 95%; margin: 10% auto; padding: 20px; }
+            .hero-image-container { height: 180px; margin-top: 20px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <h1>E.E.E.M Galópolis</h1>
+        <p>Integrantes: Arthur, Igor e Rafael | Turma: 301</p>
+        <p>Professora: Geovana Erlo</p>
+    </header>
+
+    <!-- TELA INICIAL (FOTO + BOTÕES) -->
+    <div id="telaInicial">
+        <div class="hero-image-container">
+            <img src="imagens/capa.jpg" alt="Imagem de capa Era Autoritária">
+        </div>
+
+        <div class="menu-container">
+            <button class="menu-btn" onclick="abrirLinhaTempo('europa')">Realidade Europeia</button>
+            <button class="menu-btn" onclick="abrirLinhaTempo('brasil')">Realidade Brasileira</button>
+        </div>
+    </div>
+
+    <!-- LINHA DO TEMPO: EUROPA -->
+    <div id="linhaEuropa" class="timeline-section">
+        <button class="back-btn" onclick="voltarMenu()">← Voltar ao Menu</button>
+        <h2>Linha do Tempo: Realidade Europeia (Segunda Guerra Mundial)</h2>
+        
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item item-1" onclick="abrirModal('Europa', 1)">
+                <div class="timeline-number">1</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>1. Crise do Liberalismo</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-2" onclick="abrirModal('Europa', 2)">
+                <div class="timeline-number">2</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>2. Ideologias</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-3" onclick="abrirModal('Europa', 3)">
+                <div class="timeline-number">3</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>3. Medo Vermelho</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-4" onclick="abrirModal('Europa', 4)">
+                <div class="timeline-number">4</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>4. Expansão Nazista</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-5" onclick="abrirModal('Europa', 5)">
+                <div class="timeline-number">5</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>5. Barbarossa</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-6" onclick="abrirModal('Europa', 6)">
+                <div class="timeline-number">6</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>6. Projeto Manhattan</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-7" onclick="abrirModal('Europa', 7)">
+                <div class="timeline-number">7</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>7. Virada da Guerra</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-8" onclick="abrirModal('Europa', 8)">
+                <div class="timeline-number">8</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>8. Fome de Bengala</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-9" onclick="abrirModal('Europa', 9)">
+                <div class="timeline-number">9</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>9. Alan Turing</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-10" onclick="abrirModal('Europa', 10)">
+                <div class="timeline-number">10</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>10. Fim da Guerra</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LINHA DO TEMPO: BRASIL -->
+    <div id="linhaBrasil" class="timeline-section">
+        <button class="back-btn" onclick="voltarMenu()">← Voltar ao Menu</button>
+        <h2>Linha do Tempo: Realidade Brasileira (Era Vargas)</h2>
+        
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item item-1" onclick="abrirModal('Brasil', 1)">
+                <div class="timeline-number">1</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>1. Revolução 1930</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-2" onclick="abrirModal('Brasil', 2)">
+                <div class="timeline-number">2</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>2. Voto Feminino</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-3" onclick="abrirModal('Brasil', 3)">
+                <div class="timeline-number">3</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>3. Queima do Café</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-4" onclick="abrirModal('Brasil', 4)">
+                <div class="timeline-number">4</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>4. Integralismo</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-5" onclick="abrirModal('Brasil', 5)">
+                <div class="timeline-number">5</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>5. Intentona Comunista</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-6" onclick="abrirModal('Brasil', 6)">
+                <div class="timeline-number">6</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>6. Plano Cohen</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-7" onclick="abrirModal('Brasil', 7)">
+                <div class="timeline-number">7</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>7. CLT</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-8" onclick="abrirModal('Brasil', 8)">
+                <div class="timeline-number">8</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>8. Olga Benário</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-9" onclick="abrirModal('Brasil', 9)">
+                <div class="timeline-number">9</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>9. FEB</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+            <div class="timeline-item item-10" onclick="abrirModal('Brasil', 10)">
+                <div class="timeline-number">10</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3>10. Fim do Estado Novo</h3>
+                    <p>Clique para ver os detalhes...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL (JANELA QUE ABRE) -->
+    <div id="meuModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal()">&times;</span>
+            <h2 id="modalTitulo">Título</h2>
+            <div id="modalTexto">Texto completo aqui...</div>
+            
+            <!-- ESPAÇO PARA AS FOTOS -->
+            <div class="photo-placeholder" id="modalFoto">
+                [Espaço reservado para as fotos]
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DADOS REAIS EXTRAÍDOS DO ARQUIVO ---
+        
+        const dadosEuropa = {
+            1: { 
+                titulo: "1. A crise do liberalismo e a ascensão dos regimes autoritários", 
+                texto: `Após a Primeira Guerra Mundial, diversos países europeus enfrentaram crises econômicas, políticas e sociais. A Grande Depressão de 1929 agravou esse cenário, favorecendo a ascensão de regimes autoritários, como o fascismo de Mussolini na Itália (1922), o nazismo de Hitler na Alemanha (1933) e as ditaduras de Franco na Espanha e Salazar em Portugal. Esses governos enfraqueceram ou eliminaram as instituições democráticas, concentrando o poder.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=i8ttkKflHqY" target="_blank">Vídeo: A crise do liberalismo</a>.` 
+            },
+            2: { 
+                titulo: "2. Fascismo, nazismo, socialismo e comunismo: quais são suas diferenças?", 
+                texto: `<ul>
+                    <li><strong>Fascismo:</strong> movimento autoritário e ultranacionalista, liderado por Mussolini, que defendia um Estado forte, militarismo e obediência ao líder.</li>
+                    <li><strong>Nazismo:</strong> ideologia totalitária alemã, baseada no nacionalismo extremista, racismo, antissemitismo, expansionismo territorial e perseguição de grupos considerados indesejáveis.</li>
+                    <li><strong>Socialismo:</strong> conjunto de correntes políticas e econômicas que defendem maior igualdade social e diferentes formas de propriedade coletiva ou controle social dos meios de produção.</li>
+                    <li><strong>Comunismo:</strong> corrente política que busca uma sociedade sem classes sociais e sem propriedade privada dos meios de produção, tendo como referências Marx e Engels.</li>
+                </ul>
+                <strong>Principal diferença:</strong> fascismo e nazismo eram movimentos ultranacionalistas e anticomunistas, enquanto socialismo e comunismo defendiam transformações na estrutura econômica e nas relações de classe. São ideologias distintas, e o comunismo não é simplesmente uma versão mais extrema de todo tipo de socialismo.<br><br>
+                <strong>Referências:</strong> <a href="https://www.youtube.com/watch?v=i8ttkKflHqY" target="_blank">Vídeo</a> | <a href="https://www.marxists.org/portugues/marx/1848/ManifestoDoPartidoComunista/index.htm" target="_blank">Manifesto Comunista (1848)</a>.` 
+            },
+            3: { 
+                titulo: "3. O medo vermelho e a ameaça comunista", 
+                texto: `Após a Revolução Russa de 1917, o crescimento dos movimentos comunistas provocou preocupação entre governos e grupos conservadores europeus. Esse fenômeno ficou conhecido como <em>Medo Vermelho</em>. Hitler e outros líderes autoritários utilizaram o temor de uma revolução comunista para conquistar apoio popular, perseguir opositores e justificar medidas repressivas.<br><br>
+                <strong>Referência histórica:</strong> o <em>Manifesto do Partido Comunista</em> (1848), escrito por Karl Marx e Friedrich Engels, começa com a famosa frase: "Um espectro ronda a Europa — o espectro do comunismo". A frase representa a expansão das ideias comunistas pelo continente europeu no século XIX.<br><br>
+                <strong>Referência:</strong> <a href="https://www.marxists.org/portugues/marx/1848/ManifestoDoPartidoComunista/index.htm" target="_blank">Manifesto Comunista</a>.` 
+            },
+            4: { 
+                titulo: "4. A expansão territorial nazista e o início da Segunda Guerra Mundial", 
+                texto: `Hitler defendia o <em>Lebensraum</em> (espaço vital), projeto de expansão territorial alemã, principalmente em direção ao Leste Europeu. Em 1938, anexou a Áustria e, em 1939, ocupou o restante das terras tchecas. Em 1º de setembro de 1939, a Alemanha invadiu a Polônia. Dois dias depois, Inglaterra e França declararam guerra aos alemães, iniciando a Segunda Guerra Mundial na Europa.<br><br><strong>Referências:</strong> <a href="https://www.youtube.com/watch?v=H873fcBtxfA" target="_blank">Vídeo 1</a> | <a href="https://www.youtube.com/watch?v=eFwlBRWGbKA" target="_blank">Vídeo 2</a> | <a href="https://www.youtube.com/watch?v=PZY4Hja2yiM" target="_blank">Vídeo 3</a> | <a href="https://www.youtube.com/watch?v=1CqGeAmVu1I" target="_blank">Vídeo 4</a>.` 
+            },
+            5: { 
+                titulo: "5. A conquista da Europa Ocidental e a Operação Barbarossa", 
+                texto: `Entre 1939 e 1940, a Alemanha conquistou diversos territórios europeus utilizando a <em>Blitzkrieg</em> (guerra-relâmpago), estratégia baseada em ataques rápidos e coordenados. Em junho de 1940, a França foi derrotada. Posteriormente, Hitler voltou sua atenção para o Leste Europeu e, em 22 de junho de 1941, iniciou a Operação Barbarossa, invadindo a União Soviética. O objetivo era conquistar territórios, recursos naturais e destruir o regime soviético.<br><br><strong>Referências:</strong> <a href="https://www.youtube.com/watch?v=H873fcBtxfA" target="_blank">Vídeo 1</a> | <a href="https://www.youtube.com/watch?v=eFwlBRWGbKA" target="_blank">Vídeo 2</a> | <a href="https://www.youtube.com/watch?v=PZY4Hja2yiM" target="_blank">Vídeo 3</a> | <a href="https://www.youtube.com/watch?v=1CqGeAmVu1I" target="_blank">Vídeo 4</a>.` 
+            },
+            6: { 
+                titulo: "6. O Projeto Manhattan e a criação das bombas atômicas", 
+                texto: `Em 1939, Albert Einstein assinou uma carta enviada ao presidente americano Franklin Roosevelt, alertando sobre a possibilidade de a Alemanha nazista desenvolver armas nucleares. A iniciativa foi articulada principalmente pelo físico Leo Szilard. O alerta contribuiu para o desenvolvimento das pesquisas nucleares americanas, que posteriormente deram origem ao Projeto Manhattan (1942–1945). O projeto resultou na criação das primeiras bombas atômicas, utilizadas contra Hiroshima e Nagasaki, em agosto de 1945.<br><br><strong>Referência:</strong> <a href="https://www.energy.gov/sites/default/files/Manhattan_Project_2010.pdf" target="_blank">U.S. Department of Energy - The Manhattan Project</a>.` 
+            },
+            7: { 
+                titulo: "7. A entrada dos Estados Unidos, a resistência soviética e a virada da guerra", 
+                texto: `Em dezembro de 1941, os Estados Unidos entraram oficialmente na guerra após o ataque japonês a Pearl Harbor. No mesmo período, a União Soviética resistiu à invasão alemã, conquistando uma importante vitória na Batalha de Stalingrado (1942–1943), que marcou uma grande virada no conflito. Em junho de 1944, os Aliados desembarcaram na Normandia, abrindo uma importante frente de combate na Europa Ocidental e acelerando o enfraquecimento das forças nazistas.<br><br><strong>Referências:</strong> <a href="https://www.youtube.com/watch?v=H873fcBtxfA" target="_blank">Vídeo 1</a> | <a href="https://www.youtube.com/watch?v=eFwlBRWGbKA" target="_blank">Vídeo 2</a> | <a href="https://www.youtube.com/watch?v=PZY4Hja2yiM" target="_blank">Vídeo 3</a> | <a href="https://www.youtube.com/watch?v=1CqGeAmVu1I" target="_blank">Vídeo 4</a>.` 
+            },
+            8: { 
+                titulo: "8. A Grande Fome de Bengala", 
+                texto: `Entre 1943 e 1944, a região de Bengala, na Índia britânica, enfrentou uma das maiores crises alimentares do século XX. Estima-se que entre dois e três milhões de pessoas morreram em decorrência da fome e de doenças associadas. A crise foi agravada pela inflação, pela escassez de alimentos, pelas políticas coloniais britânicas e pelas condições econômicas provocadas pela guerra. O episódio demonstra que os impactos da Segunda Guerra ultrapassaram os campos de batalha europeus.<br><br><strong>Referência:</strong> <a href="https://www.britannica.com/topic/Bengal-famine-of-1943" target="_blank">Encyclopaedia Britannica - Bengal Famine</a>.` 
+            },
+            9: { 
+                titulo: "9. A tecnologia britânica e a máquina Bombe de Alan Turing", 
+                texto: `Durante a guerra, cientistas britânicos utilizaram a máquina Bombe para auxiliar na decifração das mensagens militares alemãs protegidas pela máquina Enigma. O matemático Alan Turing foi uma das principais figuras desse trabalho, realizado em Bletchley Park. A inteligência obtida ajudou os Aliados a antecipar movimentações militares alemãs, contribuindo para importantes operações durante o conflito.<br><br><strong>Filme de referência:</strong> <em>O Jogo da Imitação</em> (2014). Direção: Morten Tyldum.` 
+            },
+            10: { 
+                titulo: "10. A derrota nazista e o fim da guerra na Europa", 
+                texto: `Em 1945, as forças soviéticas avançaram pelo Leste Europeu, enquanto os Aliados Ocidentais avançavam pelo Oeste. Berlim foi cercada e Hitler cometeu suicídio em 30 de abril de 1945. A Alemanha assinou sua rendição incondicional em maio, encerrando a guerra no continente europeu em 8 de maio de 1945. Esse dia ficou conhecido como <em>V-E Day</em> (Dia da Vitória na Europa).<br><br><strong>Filme de referência:</strong> <em>A Queda! As Últimas Horas de Hitler</em> (2004). Direção: Oliver Hirschbiegel.` 
+            }
+        };
+
+        const dadosBrasil = {
+            1: { 
+                titulo: "1. A Revolução de 1930 e a chegada de Getúlio Vargas ao poder", 
+                texto: `Em 1930, Getúlio Vargas chegou ao poder após a Revolução de 1930, movimento que derrubou o presidente Washington Luís e encerrou a chamada República Velha. O conflito teve origem na insatisfação de grupos políticos e militares com a indicação de Júlio Prestes para a sucessão presidencial, rompendo a tradicional política do café com leite. A partir disso, iniciou-se a Era Vargas, período marcado pela centralização do poder e por transformações políticas e econômicas no Brasil.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            2: { 
+                titulo: "2. A Constituição de 1934 e o direito ao voto feminino", 
+                texto: `Em 1932, durante o governo de Getúlio Vargas, foi aprovado o Código Eleitoral, que estabeleceu o voto secreto e reconheceu o direito das mulheres de votar. Em 1934, uma nova Constituição foi promulgada, trazendo mudanças importantes, como direitos trabalhistas, ensino primário gratuito e a proibição do trabalho infantil. Essas medidas representaram avanços na legislação brasileira, embora o país ainda enfrentasse instabilidade política.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            3: { 
+                titulo: "3. A queima do café e o incentivo à industrialização", 
+                texto: `Após a crise econômica de 1929, o Brasil enfrentou dificuldades para vender café no mercado internacional. Para reduzir a oferta e tentar controlar os preços, o governo Vargas determinou a compra e a queima de grandes quantidades do produto. Ao mesmo tempo, o governo incentivou a industrialização nacional e a substituição de produtos importados por produtos fabricados no Brasil, fortalecendo a economia industrial.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            4: { 
+                titulo: "4. O Integralismo e a influência do fascismo no Brasil", 
+                texto: `Em 1932, foi fundada a Ação Integralista Brasileira (AIB), movimento político liderado por Plínio Salgado e inspirado no fascismo europeu. Os integralistas defendiam o nacionalismo extremo, o autoritarismo, a centralização do poder e o combate ao comunismo. Seus integrantes ficaram conhecidos pelas camisas verdes e pela saudação com o braço levantado. Seu lema era "Deus, Pátria e Família".<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            5: { 
+                titulo: "5. A Intentona Comunista de 1935", 
+                texto: `Em novembro de 1935, ocorreu a Intentona Comunista, uma série de revoltas militares organizadas por integrantes ligados à Aliança Nacional Libertadora (ANL) e ao Partido Comunista Brasileiro (PCB). O movimento buscava derrubar o governo Vargas e promover mudanças políticas e sociais. Luiz Carlos Prestes era uma das principais lideranças políticas associadas ao movimento. As revoltas foram derrotadas pelo governo, que intensificou a repressão aos opositores.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            6: { 
+                titulo: "6. O Plano Cohen, o golpe de 1937 e o Estado Novo", 
+                texto: `Em 1937, Getúlio Vargas utilizou o Plano Cohen, um documento falso que apresentava uma suposta conspiração comunista, como justificativa para instaurar uma ditadura. Em 10 de novembro daquele ano, Vargas fechou o Congresso Nacional, cancelou as eleições e implantou o Estado Novo, regime autoritário que concentrou o poder no governo federal. Durante esse período, também ocorreu a queima das bandeiras estaduais, em 27 de novembro de 1937, como símbolo da centralização política e da valorização da unidade nacional.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            },
+            7: { 
+                titulo: "7. A Consolidação das Leis do Trabalho (CLT)", 
+                texto: `Em 1º de maio de 1943, durante o Estado Novo, Getúlio Vargas assinou o decreto que criou a Consolidação das Leis do Trabalho (CLT). A legislação reuniu e organizou diversas normas trabalhistas, estabelecendo regras para as relações entre empregados e empregadores. Entre os direitos trabalhistas desenvolvidos durante a Era Vargas estavam o salário mínimo, a carteira profissional e a regulamentação da jornada de trabalho. Essas medidas fortaleceram a imagem de Vargas como "pai dos pobres".<br><br><strong>Referências:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te</a> | <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm" target="_blank">Decreto-Lei 5.452</a>.` 
+            },
+            8: { 
+                titulo: "8. Olga Benário e Luiz Carlos Prestes", 
+                texto: `Olga Benário, militante comunista alemã, veio ao Brasil junto de Luiz Carlos Prestes e participou da articulação política ligada à Intentona Comunista de 1935. Em março de 1936, os dois foram presos pelo governo Vargas. Mesmo grávida, Olga foi deportada para a Alemanha nazista em setembro daquele ano, sendo entregue à Gestapo. Sua filha, Anita Leocádia Prestes, nasceu na prisão e posteriormente foi entregue à avó paterna. Olga permaneceu presa e foi assassinada pelo regime nazista em 1942, enquanto Prestes continuou encarcerado no Brasil até 1945.<br><br><strong>Referências:</strong> <a href="https://expo-virtual-cpdoc.fgv.br/governo-vargas" target="_blank">FGV CPDOC</a> | <a href="https://cpdoc.fgv.br/biografias/luis-carlos-prestes" target="_blank">Biografia Prestes</a>.` 
+            },
+            9: { 
+                titulo: "9. A entrada do Brasil na Segunda Guerra Mundial, a FEB e os três soldados brasileiros", 
+                texto: `Em agosto de 1942, após ataques alemães a navios brasileiros, o Brasil declarou guerra às potências do Eixo. Posteriormente, foi criada a Força Expedicionária Brasileira (FEB), que enviou aproximadamente 25 mil soldados para lutar ao lado dos Aliados na Itália. Entre as histórias relacionadas à participação brasileira está a dos três soldados conhecidos popularmente como "Três Heróis Brasileiros", cuja história inspirou a música <em>Smoking Snakes</em>, da banda sueca Sabaton. A canção homenageia a resistência desses combatentes durante a campanha italiana e tornou a participação brasileira conhecida internacionalmente.<br><br><strong>Referência:</strong> SABATON. <em>Smoking Snakes</em>. Álbum <em>Heroes</em>. 2014.` 
+            },
+            10: { 
+                titulo: "10. O fim do Estado Novo e a deposição de Getúlio Vargas", 
+                texto: `Em 1945, com o fim da Segunda Guerra Mundial e o crescimento das pressões pela redemocratização, o governo de Getúlio Vargas começou a perder apoio. Mesmo após anunciar novas eleições e permitir a formação de partidos políticos, surgiram movimentos que defendiam sua permanência no poder, como o Queremismo. Em 29 de outubro de 1945, Vargas foi deposto pelos militares, encerrando o Estado Novo e a primeira fase de seu governo. Posteriormente, ele retornaria à presidência por meio de eleições, em 1951.<br><br><strong>Referência:</strong> <a href="https://www.youtube.com/watch?v=DL9llZP4a6k" target="_blank">Historiar-te - Era Vargas</a>.` 
+            }
+        };
+
+        const fotos = {
+            'Europa': {
+                1: 'imagens/europa1.webp', 2: 'imagens/europa2.png', 3: 'imagens/europa3.jpg',
+                4: 'imagens/europa4.png', 5: 'imagens/europa5.png', 6: 'imagens/europa6.jpg',
+                7: 'imagens/europa7.jpg', 8: 'imagens/europa8.jpg', 9: 'imagens/europa9.webp', 10: 'imagens/europa10.webp'
+            },
+            'Brasil': {
+                1: 'imagens/brasil1.webp', 2: 'imagens/brasil2.webp', 3: 'imagens/brasil3.jpg',
+                4: 'imagens/brasil4.jpg', 5: 'imagens/brasil5.jpg', 6: 'imagens/brasil6.jpg',
+                7: 'imagens/brasil7.jpg', 8: 'imagens/brasil8.png', 9: 'imagens/brasil9.jpg', 10: 'imagens/brasil10.jpg'
+            }
+        };
+
+        function abrirLinhaTempo(regiao) {
+            document.getElementById('telaInicial').style.display = 'none';
+            
+            if (regiao === 'europa') {
+                document.getElementById('linhaEuropa').classList.add('active');
+                document.getElementById('linhaBrasil').classList.remove('active');
+            } else {
+                document.getElementById('linhaBrasil').classList.add('active');
+                document.getElementById('linhaEuropa').classList.remove('active');
+            }
+        }
+
+        function voltarMenu() {
+            document.getElementById('telaInicial').style.display = 'flex';
+            document.getElementById('linhaEuropa').classList.remove('active');
+            document.getElementById('linhaBrasil').classList.remove('active');
+        }
+
+        function abrirModal(regiao, id) {
+            const modal = document.getElementById('meuModal');
+            const titulo = document.getElementById('modalTitulo');
+            const texto = document.getElementById('modalTexto');
+            const fotoContainer = document.getElementById('modalFoto');
+
+            let dados = (regiao === 'Europa') ? dadosEuropa[id] : dadosBrasil[id];
+
+            titulo.innerText = dados.titulo;
+            texto.innerHTML = dados.texto; 
+            
+            const caminhoFoto = fotos[regiao][id];
+            
+            if (caminhoFoto) {
+                fotoContainer.innerHTML = `<img src="${caminhoFoto}" alt="Foto do tópico ${id}" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">`;
+                fotoContainer.style.border = 'none'; 
+                fotoContainer.style.backgroundColor = 'transparent';
+            } else {
+                fotoContainer.innerHTML = "[Foto não encontrada]";
+                fotoContainer.style.border = '2px dashed var(--linha-pontilhada)';
+                fotoContainer.style.backgroundColor = 'var(--bg-secundario)';
+            }
+
+            modal.style.display = "block";
+        }
+
+        function fecharModal() {
+            document.getElementById('meuModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('meuModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
